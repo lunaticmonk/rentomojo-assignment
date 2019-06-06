@@ -126,14 +126,9 @@ async function getUserFromAccessToken(accessToken) {
   try {
     const result = await jwt.verify(accessToken, JWT_SECRET);
     const { username } = result;
-    console.log(`>>> getUserFromAccessToken: ${result}`);
-    const user = await User.findOne({ username });
-    return {
-      _id: String(user._id),
-      name: user.name,
-      email: user.email,
-      username: user.username
-    };
+    console.log(`derived username: ${username}`);
+    const user = await User.findOne({ username }, "name username email");
+    return user;
   } catch (error) {
     return new Error(`User not found`);
   }
