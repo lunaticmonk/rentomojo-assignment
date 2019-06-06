@@ -6,7 +6,8 @@ const router = express.Router();
 const {
   getAllComments,
   createComment,
-  getComment
+  getComment,
+  upvoteComment
 } = require("../controllers/comment");
 
 const { body, header } = require("express-validator/check");
@@ -30,8 +31,19 @@ router.post(
   createComment
 );
 
+router.get("/all", getAllComments);
+
 router.get("/:id", getComment);
 
-router.get("/all", getAllComments);
+router.get(
+  "/:id/upvote",
+  [
+    header("access-token")
+      .exists()
+      .trim()
+      .withMessage("accessToken is required")
+  ],
+  upvoteComment
+);
 
 module.exports = router;

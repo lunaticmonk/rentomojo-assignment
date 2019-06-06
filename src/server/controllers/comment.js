@@ -60,6 +60,7 @@ async function createComment(req, res, next) {
 
     return res.status(response.status).send(response);
   } catch (error) {
+    console.log(error);
     const err = new ApiError(`Unable to save the comment`);
     return res.status(err.status).send(err);
   }
@@ -87,8 +88,44 @@ async function getComment(req, res, next) {
   }
 }
 
+async function upvoteComment(req, res, next) {
+  try {
+    const { id: commentId } = req.params;
+	const accessToken = req.header("access-token");
+
+    const user = await getUserFromAccessToken(accessToken);
+    const { _id: userId } = user;
+
+    const comment = await Comment.findOne({ _id: commentId });
+
+    if (comment.upvotes.includes(userId)) {
+      const response = {
+        message: `User has already upvoted`,
+        status: 200
+      };
+
+      return res.status(response.status).send(response);
+    }
+
+    comment.upvotes.push(userId);
+    const _comment = await comment.save();
+
+    const response = {
+      data: _comment,
+      message: `Upvoted successfully`,
+      status: 200
+    };
+
+    return res.status(response.status).send(response);
+  } catch (error) {
+    const err = new ApiError(`Unable to upvote the comment`);
+    return res.status(err.status).send(err);
+  }
+}
+
 module.exports = {
   getAllComments,
   createComment,
-  getComment
+  getComment,
+  upvoteComment
 };
