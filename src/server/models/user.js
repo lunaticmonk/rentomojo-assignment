@@ -15,14 +15,12 @@ const userSchema = Schema(
     },
     email: {
       type: String,
-      required: true
+      required: false
     },
-    password: [
-      {
-        type: Number,
-        required: true
-      }
-    ]
+    password: {
+      type: String,
+      required: true
+    }
   },
   { timestamps: { createdAt: "createdAt", updatedAt: "updatedAt" } }
 );
