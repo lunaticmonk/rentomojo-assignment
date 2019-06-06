@@ -16,14 +16,8 @@ const commentSchema = Schema(
       required: true,
       ref: "User"
     },
-    upvotes: {
-      type: Number,
-      required: false
-    },
-    downvotes: {
-      type: Number,
-      required: false
-    }
+    upvotes: [String],
+    downvotes: [String]
   },
   { timestamps: { createdAt: "createdAt", updatedAt: "updatedAt" } }
 );
