@@ -65,7 +65,30 @@ async function createComment(req, res, next) {
   }
 }
 
+async function getComment(req, res, next) {
+  try {
+    const { id: commentId } = req.params;
+
+    const comment = await Comment.findOne({ _id: commentId }).populate(
+      "author",
+      "username"
+    );
+
+    const response = {
+      data: comment,
+      message: `Comment returned successfully`,
+      status: 200
+    };
+
+    return res.status(response.status).send(response);
+  } catch (error) {
+    const err = new ApiError(`Unable to find the comment`);
+    return res.status(err.status).send(err);
+  }
+}
+
 module.exports = {
   getAllComments,
-  createComment
+  createComment,
+  getComment
 };

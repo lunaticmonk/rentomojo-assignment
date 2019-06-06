@@ -3,7 +3,11 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllComments, createComment } = require("../controllers/comment");
+const {
+  getAllComments,
+  createComment,
+  getComment
+} = require("../controllers/comment");
 
 const { body, header } = require("express-validator/check");
 
@@ -25,6 +29,8 @@ router.post(
   ],
   createComment
 );
+
+router.get("/:id", getComment);
 
 router.get("/all", getAllComments);
 
