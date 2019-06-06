@@ -71,6 +71,58 @@ async function registerUser(req, res, next) {
   }
 }
 
+async function logInUser(req, res, next) {
+  const err = validationResult(req);
+  if (!err.isEmpty()) {
+    return next(new UnprocessableRequestError(err.mapped()));
+  }
+
+  try {
+    const { username, password } = req.body;
+    const found = await User.findOne({ username });
+    if (found) {
+      const correct = await bcrypt.compare(password, found.password);
+      if (correct) {
+        const accessToken = jwt.sign({ username }, JWT_SECRET, {
+          expiresIn: "1d"
+        });
+        const refreshToken = jwt.sign({ username }, JWT_SECRET, {
+          expiresIn: "2d"
+        });
+        const response = {
+          user: {
+            _id: found._id,
+            email: found.email,
+            name: found.name,
+            username: found.username
+          },
+          refreshToken,
+          accessToken,
+          message: `User with username: ${username} logged in.`,
+          status: 200
+        };
+        return res.status(response.status).send(response);
+      } else {
+        const response = {
+          message: `Incorrect password`,
+          status: 403
+        };
+        return res.status(response.status).send(response);
+      }
+    } else {
+      const response = {
+        message: `User with username: ${username} does not exist. Please sign up first.`,
+        status: 404
+      };
+      return res.status(response.status).send(response);
+    }
+  } catch (error) {
+    const err = new ApiError();
+    return res.status(err.status).send(err);
+  }
+}
+
 module.exports = {
-  registerUser
+  registerUser,
+  logInUser
 };

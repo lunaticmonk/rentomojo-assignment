@@ -5,7 +5,7 @@ const router = express.Router();
 
 const { body, query } = require("express-validator/check");
 
-const { registerUser } = require("../controllers/user");
+const { registerUser, logInUser } = require("../controllers/user");
 
 router.get("/", (req, res) => {
   res.status(200).send("User Resource");
@@ -35,6 +35,21 @@ router.post(
       .withMessage("name is required")
   ],
   registerUser
+);
+
+router.post(
+  "/login",
+  [
+    body("username")
+      .exists()
+      .trim()
+      .withMessage("username is required"),
+    body("password")
+      .exists()
+      .trim()
+      .withMessage("password is required")
+  ],
+  logInUser
 );
 
 module.exports = router;
