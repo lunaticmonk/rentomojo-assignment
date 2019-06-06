@@ -131,9 +131,53 @@ async function upvoteComment(req, res, next) {
   }
 }
 
+async function downvoteComment(req, res, next) {
+  try {
+    const { id: commentId } = req.params;
+    const accessToken = req.header("access-token");
+
+    const user = await getUserFromAccessToken(accessToken);
+    const { _id: userId } = user;
+
+    const comment = await Comment.findOne({ _id: commentId });
+
+    if (comment.downvotes.includes(userId)) {
+      const response = {
+        message: `User has already downvoted`,
+        status: 200
+      };
+
+      return res.status(response.status).send(response);
+    } else {
+      if (comment.upvotes.includes(userId)) {
+        // remove froom downvotes
+        const index = comment.upvotes.indexOf(userId);
+        if (index > -1) {
+          comment.upvotes.splice(index, 1);
+        }
+      } else {
+        comment.downvotes.push(userId);
+      }
+      const _comment = await comment.save();
+
+      const response = {
+        data: _comment,
+        message: `Downvoted successfully`,
+        status: 200
+      };
+
+      return res.status(response.status).send(response);
+    }
+  } catch (error) {
+    const err = new ApiError(`Unable to downvote the comment`);
+    return res.status(err.status).send(err);
+  }
+}
+
 module.exports = {
   getAllComments,
   createComment,
   getComment,
-  upvoteComment
+  upvoteComment,
+  downvoteComment
 };

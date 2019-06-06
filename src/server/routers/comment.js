@@ -7,7 +7,8 @@ const {
   getAllComments,
   createComment,
   getComment,
-  upvoteComment
+  upvoteComment,
+  downvoteComment
 } = require("../controllers/comment");
 
 const { body, header } = require("express-validator/check");
@@ -44,6 +45,17 @@ router.get(
       .withMessage("accessToken is required")
   ],
   upvoteComment
+);
+
+router.get(
+  "/:id/downvote",
+  [
+    header("access-token")
+      .exists()
+      .trim()
+      .withMessage("accessToken is required")
+  ],
+  downvoteComment
 );
 
 module.exports = router;
