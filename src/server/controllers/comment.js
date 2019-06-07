@@ -19,7 +19,7 @@ const UnprocessableRequestError = require("../errors/unprocessablerequest");
 
 async function getAllComments(req, res, next) {
   try {
-    const comments = await Comment.find({});
+    const comments = await Comment.find({}).populate("author", "username name");
 
     const response = {
       data: comments,
