@@ -1,14 +1,21 @@
 <template>
-	<div>
+	<div class="ui container">
 		<div id="authButtons" v-if="isLoggedIn()">
-			<div id="comments">
+			<div id="comments" class="ui form">
+				<button class="ui button primary inverted right floated" v-on:click="logOut">LogOut</button>
+				<div class="field">
+					<label>Post comment</label>
+					<textarea id="commentValue"></textarea>
+					<div class="ui hidden divider"></div>
+					<button class="ui submit button primary inverted right floated" v-on:click="postComment()">Submit</button>
+				</div>
 				<h1>Comments</h1>
 			</div>
-			<button v-on:click="logOut">LogOut</button>
 		</div>
 		<div v-else>
-			<button><router-link to="/register">Register</router-link></button>
-			<button><router-link to="/login">Login</router-link></button>
+			<button class="ui button primary inverted"><router-link to="/register">Register</router-link></button>
+			<button class="ui button primary inverted"><router-link to="/login">Login</router-link></button>
+			<div class="ui hidden divider"></div>
 			<div id="comments">
 				<h1>Comments</h1>
 			</div>
@@ -39,12 +46,57 @@ export default {
       const { data: comments } = result;
       if (comments.data.length > 0) {
         for (let comment of comments.data) {
-          let commentDiv = document.createTextNode(comment.value);
+          let commentDiv = document.createElement(`div`);
+          let htmlData = `<div class="ui small segment">
+				<div class="ui grid stackable">
+					<div class="ui six wide column">
+						<span class="ui header">${comment.author.name} (${
+            comment.author.username
+          })</span>
+						<div class="ui hidden divider"></div>
+						<span>${comment.value}</span>
+					</div>
+					<div class="ui four wide column right floated">
+						<div class="ui labeled button" tabindex="0">
+							<div class="ui button">
+								<i class="thumbs up outline icon"></i> Upvote
+							</div>
+							<a class="ui basic label">
+								${comment.upvotes.length}
+							</a>
+						</div>
+						<div class="ui hidden divider"></div>
+						<div class="ui labeled button" tabindex="0">
+							<div class="ui button">
+								<i class="thumbs down outline icon"></i> Downvote
+							</div>
+							<a class="ui basic label">
+								${comment.downvotes.length}
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>`;
+          commentDiv.innerHTML = htmlData;
           document.querySelector("#comments").appendChild(commentDiv);
         }
       } else {
         document.querySelector("#comments").innerHTML = "No comments found.";
       }
+    },
+    async postComment() {
+      const config = {
+        headers: { "access-token": localStorage.getItem("accessToken") }
+      };
+      let comment = document.querySelector("#commentValue").value;
+      await axios.post(
+        `${API_BASE}/comment/create`,
+        {
+          value: comment
+        },
+        config
+      );
+      window.location = "/";
     },
     logOut() {
       if (localStorage) {
