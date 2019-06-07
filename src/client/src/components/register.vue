@@ -24,9 +24,8 @@
           <div class="header">Error</div>
           <p></p>
         </div>
-        <button class="ui submit button bg-primary-dark" v-on:click="submit">Submit</button>
-		<button><router-link to="/login">Login</router-link></button>
-        <!-- <p>Already have an account?. Log in <router-link to="/">here</router-link></p> -->
+        <button class="ui submit button primary inverted" v-on:click="submit">Submit</button>
+        <p>Already have an account?. Log in <router-link to="/login">here</router-link></p>
       </div>
     </div>
 </div>
