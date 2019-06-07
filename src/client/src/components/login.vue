@@ -47,7 +47,17 @@ export default {
           resultData.message;
       } else {
         // redirect the user to dashboard.
-        this.$router.push({ path: "/" });
+        if (localStorage) {
+          localStorage.setItem("accessToken", resultData.accessToken);
+          localStorage.setItem("userId", resultData.user._id);
+          this.$router.push({ path: "/" });
+        } else {
+          document
+            .querySelector("#form_error_success")
+            .setAttribute("style", "display: block");
+          document.querySelector("#form_error_success p").innerHTML =
+            "Please enable local storage";
+        }
       }
     }
   }
