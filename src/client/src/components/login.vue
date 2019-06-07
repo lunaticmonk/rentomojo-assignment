@@ -36,17 +36,9 @@ export default {
         password: document.querySelector('input[name="password"]').value,
         username: document.querySelector('input[name="username"]').value
       };
-      const result = await axios.post(`${API_BASE}/user/login`, data);
-      const { data: resultData } = result;
-      console.log(resultData);
-      if (!resultData.user) {
-        document
-          .querySelector("#form_error_success")
-          .setAttribute("style", "display: block");
-        document.querySelector("#form_error_success p").innerHTML =
-          resultData.message;
-      } else {
-        // redirect the user to dashboard.
+      try {
+        const result = await axios.post(`${API_BASE}/user/login`, data);
+        const { data: resultData } = result;
         if (localStorage) {
           localStorage.setItem("accessToken", resultData.accessToken);
           localStorage.setItem("userId", resultData.user._id);
@@ -58,6 +50,12 @@ export default {
           document.querySelector("#form_error_success p").innerHTML =
             "Please enable local storage";
         }
+      } catch (error) {
+        document
+          .querySelector("#form_error_success")
+          .setAttribute("style", "display: block");
+        document.querySelector("#form_error_success p").innerHTML =
+          error.response.data.message;
       }
     }
   }
