@@ -107,10 +107,10 @@ async function upvoteComment(req, res, next) {
       return res.status(response.status).send(response);
     } else {
       if (comment.downvotes.includes(userId)) {
-        // remove froom downvotes
         const index = comment.downvotes.indexOf(userId);
         if (index > -1) {
           comment.downvotes.splice(index, 1);
+          comment.upvotes.push(userId);
         }
       } else {
         comment.upvotes.push(userId);
@@ -150,10 +150,10 @@ async function downvoteComment(req, res, next) {
       return res.status(response.status).send(response);
     } else {
       if (comment.upvotes.includes(userId)) {
-        // remove froom downvotes
         const index = comment.upvotes.indexOf(userId);
         if (index > -1) {
           comment.upvotes.splice(index, 1);
+          comment.downvotes.push(userId);
         }
       } else {
         comment.downvotes.push(userId);
