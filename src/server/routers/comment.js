@@ -3,6 +3,8 @@
 const express = require("express");
 const router = express.Router();
 
+const { isAuthorized } = require("../policies/policy");
+
 const {
   getAllComments,
   createComment,
@@ -29,6 +31,7 @@ router.post(
       .trim()
       .withMessage("accessToken is required")
   ],
+  isAuthorized,
   createComment
 );
 
@@ -44,6 +47,7 @@ router.get(
       .trim()
       .withMessage("accessToken is required")
   ],
+  isAuthorized,
   upvoteComment
 );
 
@@ -55,6 +59,7 @@ router.get(
       .trim()
       .withMessage("accessToken is required")
   ],
+  isAuthorized,
   downvoteComment
 );
 
