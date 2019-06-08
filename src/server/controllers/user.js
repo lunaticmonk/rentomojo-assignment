@@ -105,7 +105,7 @@ async function logInUser(req, res, next) {
       } else {
         const response = {
           message: `Incorrect password`,
-          status: 403
+          status: 401
         };
         return res.status(response.status).send(response);
       }
@@ -126,7 +126,6 @@ async function getUserFromAccessToken(accessToken) {
   try {
     const result = await jwt.verify(accessToken, JWT_SECRET);
     const { username } = result;
-    console.log(`derived username: ${username}`);
     const user = await User.findOne({ username }, "name username email");
     return user;
   } catch (error) {

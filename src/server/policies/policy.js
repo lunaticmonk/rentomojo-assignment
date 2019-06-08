@@ -19,7 +19,6 @@ async function isAuthorized(req, res, next) {
         });
       }
     } else {
-      console.log(`access token valid. returning next`);
       return next();
     }
   });

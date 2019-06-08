@@ -60,7 +60,6 @@ async function createComment(req, res, next) {
 
     return res.status(response.status).send(response);
   } catch (error) {
-    console.log(error);
     const err = new ApiError(`Unable to save the comment`);
     return res.status(err.status).send(err);
   }
