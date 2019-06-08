@@ -25,6 +25,8 @@ To have an easy access, the app is deployed here: [https://rentomojo.lunaticmonk
 
 ```shell
 $ npm install -g yarn
+$ git clone https://github.com/lunaticmonk/rentomojo-assignment.git
+$ cd rentomojo-assignment
 $ yarn
 $ cd src/client
 $ yarn
