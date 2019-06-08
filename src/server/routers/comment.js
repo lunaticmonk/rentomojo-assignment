@@ -39,7 +39,7 @@ router.get("/all", getAllComments);
 
 router.get("/:id", getComment);
 
-router.get(
+router.patch(
   "/:id/upvote",
   [
     header("access-token")
@@ -51,7 +51,7 @@ router.get(
   upvoteComment
 );
 
-router.get(
+router.patch(
   "/:id/downvote",
   [
     header("access-token")

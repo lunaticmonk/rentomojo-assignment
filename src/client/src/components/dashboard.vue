@@ -22,14 +22,15 @@
 		</div>
 		<div class="ui small segment" v-for="(comment, index) in comments" v-bind:key="index">
 			<div class="ui grid stackable">
-				<div class="ui six wide column">
+				<div class="ui eight wide column">
+					<span class="ui header">{{ index }} ) </span>
 					<span class="ui header">{{ comment.author.name }} ({{ comment.author.username }})</span>
 					<div class="ui hidden divider"></div>
 					<span>{{ comment.value }}</span>
 				</div>
 				<div class="ui four wide column right floated">
 					<div class="ui labeled button" v-bind:class="{ disabled: !isLoggedIn() }" tabindex="0">
-						<div class="ui button" v-on:click="upvoteComment(comment._id)">
+						<div class="ui button" v-on:click="upvoteComment(comment._id, comment.upvotes)">
 							<i class="thumbs up outline icon"></i> <span>Upvote</span>
 						</div>
 						<a class="ui basic label">
@@ -38,7 +39,7 @@
 					</div>
 					<div class="ui hidden divider"></div>
 					<div class="ui labeled button" v-bind:class="{ disabled: !isLoggedIn() }" tabindex="0">
-						<div class="ui button" v-on:click="downvoteComment(comment._id)">
+						<div class="ui button" v-on:click="downvoteComment(comment._id, comment.downvotes)">
 							<i class="thumbs down outline icon"></i> <span>Downvote</span>
 						</div>
 						<a class="ui basic label">
@@ -94,18 +95,22 @@ export default {
       );
       window.location = "/";
     },
-    async upvoteComment(commentId) {
+    async upvoteComment(commentId, upvotes) {
       const config = {
         headers: { "access-token": localStorage.getItem("accessToken") }
       };
-      await axios.get(`${API_BASE}/comment/${commentId}/upvote`, config);
+      await axios.patch(`${API_BASE}/comment/${commentId}/upvote`, {}, config);
       window.location = "/";
     },
-    async downvoteComment(commentId) {
+    async downvoteComment(commentId, downvotes) {
       const config = {
         headers: { "access-token": localStorage.getItem("accessToken") }
       };
-      await axios.get(`${API_BASE}/comment/${commentId}/downvote`, config);
+      await axios.patch(
+        `${API_BASE}/comment/${commentId}/downvote`,
+        {},
+        config
+      );
       window.location = "/";
     },
     logOut() {
