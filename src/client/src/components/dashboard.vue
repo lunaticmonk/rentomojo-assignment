@@ -90,14 +90,18 @@ export default {
         headers: { "access-token": localStorage.getItem("accessToken") }
       };
       let comment = document.querySelector("#commentValue").value;
-      await axios.post(
+      const result = await axios.post(
         `${API_BASE}/comment/create`,
         {
           value: comment
         },
         config
       );
-      window.location = "/";
+
+      let commentData = await this.populateComments();
+      this.comments = commentData.data;
+      document.querySelector("#commentValue").value = "";
+      this.$toasted.show(result.data.message);
     },
     async upvoteComment(commentId) {
       const config = {
@@ -109,16 +113,19 @@ export default {
         config
       );
 
-      const { data: comment } = result.data;
+      if (result.data.data) {
+        const { data: comment } = result.data;
 
-      const index = this.comments.findIndex(function(elem) {
-        return elem._id === comment._id;
-      });
+        const index = this.comments.findIndex(function(elem) {
+          return elem._id === comment._id;
+        });
 
-      if (index > -1) {
-        this.comments[index].upvotes = comment.upvotes;
-        this.comments[index].downvotes = comment.downvotes;
+        if (index > -1 && comment) {
+          this.comments[index].upvotes = comment.upvotes;
+          this.comments[index].downvotes = comment.downvotes;
+        }
       }
+      this.$toasted.show(result.data.message);
     },
     async downvoteComment(commentId) {
       const config = {
@@ -130,16 +137,19 @@ export default {
         config
       );
 
-      const { data: comment } = result.data;
+      if (result.data.data) {
+        const { data: comment } = result.data;
 
-      let index = this.comments.findIndex(function(elem) {
-        return elem._id === comment._id;
-      });
+        const index = this.comments.findIndex(function(elem) {
+          return elem._id === comment._id;
+        });
 
-      if (index > -1) {
-        this.comments[index].upvotes = comment.upvotes;
-        this.comments[index].downvotes = comment.downvotes;
+        if (index > -1 && comment) {
+          this.comments[index].upvotes = comment.upvotes;
+          this.comments[index].downvotes = comment.downvotes;
+        }
       }
+      this.$toasted.show(result.data.message);
     },
     logOut() {
       if (localStorage) {
