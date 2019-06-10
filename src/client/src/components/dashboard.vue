@@ -103,25 +103,49 @@ export default {
       const config = {
         headers: { "access-token": localStorage.getItem("accessToken") }
       };
-      await axios.patch(`${API_BASE}/comment/${commentId}/upvote`, {}, config);
-      window.location = "/";
+      const result = await axios.patch(
+        `${API_BASE}/comment/${commentId}/upvote`,
+        {},
+        config
+      );
+
+      const { data: comment } = result.data;
+
+      const index = this.comments.findIndex(function(elem) {
+        return elem._id === comment._id;
+      });
+
+      if (index > -1) {
+        this.comments[index].upvotes = comment.upvotes;
+        this.comments[index].downvotes = comment.downvotes;
+      }
     },
     async downvoteComment(commentId) {
       const config = {
         headers: { "access-token": localStorage.getItem("accessToken") }
       };
-      await axios.patch(
+      const result = await axios.patch(
         `${API_BASE}/comment/${commentId}/downvote`,
         {},
         config
       );
-      window.location = "/";
+
+      const { data: comment } = result.data;
+
+      let index = this.comments.findIndex(function(elem) {
+        return elem._id === comment._id;
+      });
+
+      if (index > -1) {
+        this.comments[index].upvotes = comment.upvotes;
+        this.comments[index].downvotes = comment.downvotes;
+      }
     },
     logOut() {
       if (localStorage) {
         localStorage.setItem("accessToken", "");
         localStorage.setItem("userId", "");
-        window.location = "/";
+        this.$router.go();
       }
     }
   }
