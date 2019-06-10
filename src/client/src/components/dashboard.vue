@@ -71,8 +71,11 @@ export default {
   methods: {
     isLoggedIn() {
       let accessToken = localStorage.getItem("accessToken");
-      let userId = localStorage.getItem("userId");
-      if (accessToken !== "" && userId !== "") {
+      if (
+        accessToken !== "" &&
+        accessToken !== null &&
+        accessToken !== undefined
+      ) {
         return true;
       }
       return false;
