@@ -155,7 +155,8 @@ export default {
       if (localStorage) {
         localStorage.setItem("accessToken", "");
         localStorage.setItem("userId", "");
-        this.$router.go();
+        this.$toasted.show("Logged out successfully");
+        this.$router.push({ path: "/login" });
       }
     }
   }

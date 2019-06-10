@@ -1,33 +1,34 @@
 <template>
-  <div id="signup">
-  <div class="ui hidden divider"></div>
-    <div class="ui raised very padded text container segment bg-primary">
-      <h2 class="ui header">Sign up</h2>
-      <div class="ui form success" id="signupform">
-		<div class="field">
-          <label>username</label>
-          <input type="text" placeholder="joedoe" name="username"/>
-        </div>
-        <div class="field">
-          <label>email</label>
-          <input type="email" placeholder="joe@doe.com" name="email"/>
-        </div>
-        <div class="field">
-          <label>password</label>
-          <input type="password" placeholder="*********" name="password"/>
-        </div>
-        <div class="field">
-          <label>name</label>
-          <input type="text" placeholder="Faizal" name="name"/>
-        </div>
-        <div class="ui error message" style="display: none" id="form_error_success">
-          <div class="header">Error</div>
-          <p></p>
-        </div>
-        <button class="ui submit button primary inverted" v-on:click="submit">Submit</button>
-        <p>Already have an account?. Log in <router-link to="/login">here</router-link></p>
-      </div>
-    </div>
+<div id="signup">
+	<button class="ui button primary inverted"><router-link to="/">Home</router-link></button>
+	<div class="ui hidden divider"></div>
+	<div class="ui raised very padded text container segment bg-primary">
+		<h2 class="ui header">Sign up</h2>
+		<div class="ui form success" id="signupform">
+			<div class="field">
+				<label>username</label>
+				<input type="text" placeholder="joedoe" name="username"/>
+			</div>
+			<div class="field">
+				<label>email</label>
+				<input type="email" placeholder="joe@doe.com" name="email"/>
+			</div>
+			<div class="field">
+				<label>password</label>
+				<input type="password" placeholder="*********" name="password"/>
+				</div>
+			<div class="field">
+				<label>name</label>
+				<input type="text" placeholder="Faizal" name="name"/>
+			</div>
+			<div class="ui error message" style="display: none" id="form_error_success">
+				<div class="header">Error</div>
+				<p></p>
+			</div>
+			<button class="ui submit button primary inverted" v-on:click="submit">Submit</button>
+			<p>Already have an account?. Log in <router-link to="/login">here</router-link></p>
+		</div>
+	</div>
 </div>
 </template>
 
@@ -51,6 +52,7 @@ export default {
         const { data: resultData } = result;
         if (localStorage) {
           localStorage.setItem("user", resultData.user);
+          this.$toasted.show("Signed up successfully");
           this.$router.push({ path: "/" });
         } else {
           document
