@@ -12,7 +12,8 @@
     "core-js": "^2.6.5",
     "semantic-ui-css": "^2.4.1",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.6"
+    "vue-router": "^3.0.6",
+    "vue-toasted": "^1.1.27"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
