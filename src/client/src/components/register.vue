@@ -41,13 +41,18 @@ export default {
   methods: {
     async submit(event) {
       event.preventDefault();
-      const data = {
-        email: document.querySelector('input[name="email"]').value,
-        password: document.querySelector('input[name="password"]').value,
-        name: document.querySelector('input[name="name"]').value,
-        username: document.querySelector('input[name="username"]').value
-      };
+
       try {
+        const data = {
+          email: document.querySelector('input[name="email"]').value,
+          password: document.querySelector('input[name="password"]').value,
+          name: document.querySelector('input[name="name"]').value,
+          username: document.querySelector('input[name="username"]').value
+        };
+
+        if (!data.username || !data.password) {
+          throw new Error(`Username and Password are required to sign up.`);
+        }
         const result = await axios.post(`${API_BASE}/user/register`, data);
         const { data: resultData } = result;
         if (localStorage) {
@@ -62,11 +67,23 @@ export default {
             "Please enable local storage";
         }
       } catch (error) {
+        let errorMessage;
+        if (error.response && error.response.data) {
+          errorMessage = !error.response.data
+            ? error
+            : Object.keys(error.response.data.message)
+                .map(key => error.response.data.message[key].msg)
+                .join(" ");
+        } else {
+          errorMessage = error;
+        }
+
         document
           .querySelector("#form_error_success")
           .setAttribute("style", "display: block");
-        document.querySelector("#form_error_success p").innerHTML =
-          error.response.data.message;
+        document.querySelector(
+          "#form_error_success p"
+        ).innerHTML = errorMessage;
       }
     }
   }
