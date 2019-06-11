@@ -126,8 +126,12 @@ export default {
           this.comments[index].upvotes = comment.upvotes;
           this.comments[index].downvotes = comment.downvotes;
         }
+        this.$toasted.show(result.data.message);
+      } else {
+        this.$toasted.global.error({
+          message: result.data.message
+        });
       }
-      this.$toasted.show(result.data.message);
     },
     async downvoteComment(commentId) {
       const config = {
@@ -150,8 +154,12 @@ export default {
           this.comments[index].upvotes = comment.upvotes;
           this.comments[index].downvotes = comment.downvotes;
         }
+        this.$toasted.show(result.data.message);
+      } else {
+        this.$toasted.global.error({
+          message: result.data.message
+        });
       }
-      this.$toasted.show(result.data.message);
     },
     logOut() {
       if (localStorage) {
@@ -166,4 +174,7 @@ export default {
 </script>
 
 <style>
+.error {
+  background-color: "#ff0000";
+}
 </style>
