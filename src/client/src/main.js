@@ -10,6 +10,7 @@ import "../node_modules/semantic-ui-css/semantic.min.css";
  * Vue-Toasted for toasts
  */
 
+//  options to the normal toast.
 let toastOptions = {
   theme: "toasted-primary",
   position: "top-right",
@@ -17,6 +18,27 @@ let toastOptions = {
 };
 
 Vue.use(Toasted, toastOptions);
+
+// options to the error toast
+let errorToastOptions = {
+  position: "top-right",
+  duration: 1000,
+  className: "error"
+};
+
+/**
+ * Register error message toast.
+ */
+Vue.toasted.register(
+  "error",
+  payload => {
+    if (!payload.message) {
+      return "Something Went Wrong.";
+    }
+    return payload.message;
+  },
+  errorToastOptions
+);
 
 Vue.config.productionTip = false;
 
