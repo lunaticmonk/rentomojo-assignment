@@ -1,6 +1,7 @@
 <template>
 	<div class="ui container">
 		<div id="authButtons" v-if="isLoggedIn()">
+			<p class="ui huge green label right floated">{{ currentUser }}</p>
 			<div id="comments" class="ui form">
 				<button class="ui button primary inverted right floated" v-on:click="logOut()">LogOut</button>
 				<div class="field">
@@ -65,7 +66,8 @@ export default {
   },
   data() {
     return {
-      comments: []
+      comments: [],
+      currentUser: localStorage.getItem("username")
     };
   },
   methods: {

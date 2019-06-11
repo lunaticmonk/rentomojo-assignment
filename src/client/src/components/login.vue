@@ -44,6 +44,7 @@ export default {
         if (localStorage) {
           localStorage.setItem("accessToken", resultData.accessToken);
           localStorage.setItem("userId", resultData.user._id);
+          localStorage.setItem("username", resultData.user.username);
           this.$toasted.show("Logged in successfully");
           this.$router.push({ path: "/" });
         } else {
