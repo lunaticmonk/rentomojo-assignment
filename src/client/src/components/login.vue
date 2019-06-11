@@ -37,6 +37,7 @@ export default {
         password: document.querySelector('input[name="password"]').value,
         username: document.querySelector('input[name="username"]').value
       };
+
       try {
         const result = await axios.post(`${API_BASE}/user/login`, data);
         const { data: resultData } = result;
@@ -53,11 +54,18 @@ export default {
             "Please enable local storage";
         }
       } catch (error) {
+        let errorMessage;
+        if (!data.username || !data.password) {
+          errorMessage = `username and password are required to sign in.`;
+        } else {
+          errorMessage = error.response.data.message;
+        }
         document
           .querySelector("#form_error_success")
           .setAttribute("style", "display: block");
-        document.querySelector("#form_error_success p").innerHTML =
-          error.response.data.message;
+        document.querySelector(
+          "#form_error_success p"
+        ).innerHTML = errorMessage;
       }
     }
   }
